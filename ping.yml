@@ -1,7 +1,13 @@
 ---
 - name: Test connectivity on dev servers
   hosts: dev_servers
-  gather_facts: false
+  gather_facts: false          # we can still leave this off
   tasks:
-    - name: Ping each host
+    - name: Ping each host           # sanity-check the host is reachable
       ansible.builtin.ping:
+
+    - name: Create ~/temp-semaphore  # touch an empty file in $HOME
+      ansible.builtin.file:
+        path: "~/temp-semaphore"     # tilde expands to the remote user’s home
+        state: touch                 # “touch” = create if missing, leave as-is if present
+        mode: "0644"                 # (optional) give rw-r--r-- perms
